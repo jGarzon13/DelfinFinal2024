@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verano Delfin</title>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scene = document.querySelector('a-scene');
+            const soundEntity = document.querySelector('#sound-entity');
+            const textEntity = document.querySelector('#info-text');
+            
+            function enableAudio() {
+                const soundComponent = soundEntity.components.sound;
+                if (soundComponent) {
+                    soundComponent.playSound();
+                }
+                scene.removeEventListener('click', enableAudio);
+            }
+            scene.addEventListener('click', enableAudio);
+
+            function updateText(event) {
+                const planetName = event.target.getAttribute('data-name');
+                textEntity.setAttribute('value', planetName);
+            }
+
+            // Add event listeners to planets
+            const planets = document.querySelectorAll('[data-name]');
+            planets.forEach(planet => {
+                planet.addEventListener('mouseenter', updateText);
+                planet.addEventListener('mouseleave', () => {
+                    textEntity.setAttribute('value', 'Sistema Solar');
+                });
+            });
+
+            // Handle Escape key press
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    window.location.href = 'index.html';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <a-scene>
+        <a-assets>
+            <img src="Assets/sky.jpeg" id="sky">
+            <img src="Assets/meteor.jpeg" id="meteoro">
+            <img src="Assets/uranus.jpg" id="uranus">
+            <img src="Assets/earth.jpg" id="earth">
+            <img src="Assets/mars.jpg" id="mars">
+            <img src="Assets/mercury.jpg" id="mercury">
+            <img src="Assets/saturn.jpg" id="saturn">
+            <img src="Assets/venus.jpg" id="venus">
+            <img src="Assets/jupiter.jpg" id="jupiter">
+            <img src="Assets/neptune.jpg" id="neptune">
+            <audio id="sound" src="Assets/Sound.mp3" preload="auto"></audio>
+        </a-assets>
+        <a-sky src="#sky"></a-sky>
+
+        <a-entity id="sound-entity" position="0 0 0" rotation="0 0 0" 
+                  animation="property: rotation; to: 0 360 0; loop: true; dur: 40000" 
+                  sound="src: #sound; autoplay: false; loop: true">
+            <!-- Planetas originales -->
+            <a-entity geometry="primitive: dodecahedron" material="src: #venus" position="0 2 -7" data-name="Venus"></a-entity>
+            <a-entity geometry="primitive: dodecahedron" material="src: #earth" position="-7 2 0" data-name="Tierra"></a-entity>
+            <a-entity geometry="primitive: dodecahedron" material="src: #uranus" position="0 2 7" data-name="Urano"></a-entity>
+            <a-entity geometry="primitive: dodecahedron" material="src: #neptune" position="7 2 0" data-name="Neptuno"></a-entity>
+
+            <!-- Planetas adicionales con posiciones ajustadas -->
+            <a-entity geometry="primitive: dodecahedron" material="src: #mercury" position="6 2 -8" data-name="Mercurio"></a-entity>
+            <a-entity geometry="primitive: dodecahedron" material="src: #mars" position="-8 2 6" data-name="Marte"></a-entity>
+            <a-entity geometry="primitive: dodecahedron" material="src: #jupiter" position="6 2 6" data-name="Jupiter"></a-entity>
+            <a-entity geometry="primitive: dodecahedron" material="src: #saturn" position="-6 2 -6" data-name="Saturno"></a-entity>
+        </a-entity>
+
+        <a-entity camera look-controls>
+            <a-entity cursor="fuse: true; fuseTimeout: 100" position="0 0 -1" geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03" material="shader: flat"></a-entity>
+            <a-text id="info-text" value="Sistema Solar" color="white" position="0 -0.1 -1" width="1" align="center"></a-text>
+        </a-entity>
+    </a-scene>
+</body>
+</html>

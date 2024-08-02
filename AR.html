@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mind AR - Video Playback</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<body>
+    <a-scene mindar-image="imageTargetSrc: Targets/Pare.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+ 
+        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+        <!-- Marcador y video -->
+        <a-entity mindar-image-target="targetIndex: 0">
+            <a-video id="video" src="Targets/Y2meta.app-La señal de STOP. Aprende Educación Vial con Mon el dragón.-(720p).mp4" position="0 0 0" width="2" height="1.125"></a-video>
+        </a-entity>
+
+    </a-scene>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoElement = document.querySelector('#video');
+
+            // Pause video initially
+            videoElement.components.material.material.map.image.pause();
+
+            // Listener para el evento targetFound
+            videoElement.parentElement.addEventListener('targetFound', () => {
+                videoElement.components.material.material.map.image.play();
+            });
+
+            // Listener para el evento targetLost
+            videoElement.parentElement.addEventListener('targetLost', () => {
+                videoElement.components.material.material.map.image.pause();
+            });
+
+            // Handle Escape key press
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    window.location.href = 'index.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
